@@ -77,11 +77,11 @@ Below is an example test case for the GetById method:
 ```
 This structure allows you to test services with or without Dependency Injection, ensuring flexibility and proper separation of concerns in your integration tests.
 
-# 5. Mock test 
-I only use when I want to test a part of a function 
+# 5. Mocking and Testing Specific Scenarios
+In some cases, we may want to test a specific part of a function or control the workflow within a test case. Mocking is a powerful tool for this purpose. Below is an example of how to set up and use mocking for dependency injection in test cases.
 1. Setting Up for Specific Test Cases
-
-
+To test specific workflows, we can use the Moq library to create mock objects for dependencies:
+```bash
         private Mock<AppSettings> _mockAppSettings;
         private Mock<IContractService> _mockContractService;
         private CustomerService _mockDICustomerService;
@@ -93,6 +93,9 @@ I only use when I want to test a part of a function
             _mockDICustomerService = new CustomerService(_mockAppSettings.Object, _mockContractService.Object);
         }
 ```
+Here:
+* _mockAppSettings and _mockContractService are mocked dependencies.
+* _mockDICustomerService is the service being tested, injected with the mocked dependencies.
 2. Setup function mock to return throw exception
 ```bash
 _mockContractService.Setup(mock => mock.Insert(It.IsAny<ContractEntity>())).Throws(new Exception());
