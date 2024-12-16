@@ -76,3 +76,36 @@ Below is an example test case for the GetById method:
         }
 ```
 This structure allows you to test services with or without Dependency Injection, ensuring flexibility and proper separation of concerns in your integration tests.
+
+# 5. Mock test 
+I only use when I want to test a part of a function 
+1. Setting Up for Specific Test Cases
+
+
+        private Mock<AppSettings> _mockAppSettings;
+        private Mock<IContractService> _mockContractService;
+        private CustomerService _mockDICustomerService;
+        [SetUp]
+        public void Setup()
+        {
+            _mockAppSettings = new Mock<AppSettings>();
+            _mockContractService = new Mock<IContractService>();
+            _mockDICustomerService = new CustomerService(_mockAppSettings.Object, _mockContractService.Object);
+        }
+```
+2. Setup function mock to return throw exception
+```bash
+_mockContractService.Setup(mock => mock.Insert(It.IsAny<ContractEntity>())).Throws(new Exception());
+```
+3. Creating a Test Case
+```bash
+        [Test]
+        public async Task MockTestDI_Insert()
+        {
+            _mockContractService.Setup(mock => mock.Insert(It.IsAny<ContractEntity>())).Throws(new Exception());
+            var rs1 = await _mockDICustomerService.Insert( new Core.Models.EntityModels.ContractEntity());
+
+            Assert.That(rs1.Code == 500);
+        }
+```
+
