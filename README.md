@@ -20,9 +20,10 @@ And the project named "NUnitProject" for creating and managing test cases.
 To set up testing services with Dependancy Injection in NUnitProject, we use the ServiceCollection to manage dependancies. Below are the steps and details:
 1. Declaration in "BaseIntegrationTestGlobal.cs". In this file, we declare
 
+```bash
 private static ServiceCollection _servicesCollection; // For registrating services 
 private static ServiceProvider _serviceProvider; // For resolving service with Dependancy Injection
-
+```
 2. Base Functions for configuration and Setup
 BaseIntegrationTestGlobal.cs contains base functions to configure and initialize the setup:
  - InitConfig(): Binds data from environment-specific appsettings files
@@ -30,6 +31,7 @@ BaseIntegrationTestGlobal.cs contains base functions to configure and initialize
  - GetService<T>: Resolves and provides a service using Dependancy Injection 
 
 To set up the environment and configure services globally for all unit tests, the InitSetupForAllUnitTest.cs file contains the following setup:
+```bash
     [SetUpFixture]
     public class InitSetupForAllUnitTest
     {
@@ -46,10 +48,10 @@ To set up the environment and configure services globally for all unit tests, th
 
         }
     }
-
+```
 3. Setting Up for Specific Test Cases
 To set up the test environment for a specific service, such as ContractService:
-
+```bash
       private AppSettings _appSettings;
       private IContractService _DIContractService;
       private IContractService _newContractService;
@@ -60,9 +62,10 @@ To set up the test environment for a specific service, such as ContractService:
           _DIContractService = BaseIntegrationTestGlobal.GetService<IContractService>(); // Service with Dependancy injection
           _newContractService = new ContractService(_appSettings); // Create neu Service 
       }
-
+```
 4. Creating a Test Case
 Below is an example test case for the GetById method:
+```bash
         [Test]
         public async Task GetById()
         {
@@ -71,5 +74,5 @@ Below is an example test case for the GetById method:
 
             Assert.Pass();
         }
-
+```
 This structure allows you to test services with or without Dependency Injection, ensuring flexibility and proper separation of concerns in your integration tests.
