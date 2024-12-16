@@ -96,11 +96,14 @@ To test specific workflows, we can use the Moq library to create mock objects fo
 Here:
 * _mockAppSettings and _mockContractService are mocked dependencies.
 * _mockDICustomerService is the service being tested, injected with the mocked dependencies.
-2. Setup function mock to return throw exception
+2. Setting Up a Mock to Simulate Exceptions
+  We can configure a mocked function to throw an exception for specific scenarios using Setup from Moq:
 ```bash
 _mockContractService.Setup(mock => mock.Insert(It.IsAny<ContractEntity>())).Throws(new Exception());
 ```
+This simulates a failure in the Insert method of the IContractService dependency, which allows us to test error-handling workflows.
 3. Creating a Test Case
+Here's an example test case for the Insert function, handling the exception scenario:
 ```bash
         [Test]
         public async Task MockTestDI_Insert()
@@ -111,4 +114,12 @@ _mockContractService.Setup(mock => mock.Insert(It.IsAny<ContractEntity>())).Thro
             Assert.That(rs1.Code == 500);
         }
 ```
+In this example:
+* The Insert method of _mockDICustomerService is tested, using a mocked IContractService that throws an exception.
+* The test checks if the exception is properly handled and if the returned response code matches the expected value (e.g., 500 for an error).
 
+Benefits:
+* Control over Dependencies: Mocking allows you to isolate the unit under test and control its behavior.
+* Error-Handling Validation: Simulating exceptions helps ensure your application behaves correctly in failure scenarios.
+* Flexible Workflows: Mocking enables testing specific workflows without depending on actual implementations.
+This approach ensures precise and targeted tests, improving the reliability of your code.
